@@ -5,6 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest
+from .forms import CTFForm
 
 def home(request):
     """Renders the home page."""
@@ -40,5 +41,37 @@ def about(request):
         {
             'title':'О сайте',
             'year':datetime.now().year,
+        }
+    )
+
+def anketa(request):
+    assert isinstance(request, HttpRequest)
+    data = None
+    gender = {"1" : "Мужской", "2" : "Женщина"}
+    about_ctf = {"1" : "Нет, не знал", "2" : "Знаю о их существований", 
+                "3" : "Знаю о их существований, участовал в них", 
+                "4" : "Постоянно играю в CTF"}
+    surctf = {"1" : "Нет, не хочу участвовать",
+            "2" : "Да, хочу участвовать", 
+            "3" : "Не уверен"}
+    if request.method == "POST":
+        form = CTFForm(request.POST)
+        if form.is_valid():
+            data = dict()
+            data['name'] = form.cleaned_data['name']
+            data['city'] = form.cleaned_data['city']
+            data['gender'] = gender[ form.cleaned_data['gender'] ] 
+            data['about_ctf'] = about_ctf[ form.cleaned_data['about_ctf'] ]
+            data['surctf'] = surctf [ form.cleaned_data['surctf'] ]
+            data[ 'message'] = form.cleaned_data['message']
+            form = None
+    else:
+        form = CTFForm()
+    return render(
+        request,
+        'app/anketaform.html',
+        {
+            'form':form,
+            'data':data
         }
     )
