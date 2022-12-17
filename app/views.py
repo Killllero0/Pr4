@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.db import models
 from .models import Blog, Comment
-from .forms import CTFForm, CommentForm
+from .forms import CTFForm, CommentForm, BlogForm
 
 
 def home(request):
@@ -119,5 +119,32 @@ def blog(request):
             'title': 'Блог',
             'posts': posts,
             'year' : datetime.now().year, 
+        }
+    )
+
+
+def newpost(request):
+    assert isinstance(request, HttpRequest)
+
+    if request.method == 'POST':
+        blogform = BlogForm(request.POST, request.FILES)
+        if blogform.is_valid():
+            blog_f = blogform.save(commit=False)
+            blog_f.posted = datetime.now()
+            blog_f.author = request.user
+            blog_f.save()
+
+            return redirect('blog')
+    else:
+        blogform = BlogForm()
+    
+
+    return render(
+        request,
+        'app/newpost.html',
+        {
+            'blogform': blogform,
+            'title' : 'Добавить статью блога',
+            'year' : datetime.now().year,
         }
     )

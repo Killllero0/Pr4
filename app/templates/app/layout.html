@@ -28,6 +28,9 @@
                     <li><a href="{% url 'about' %}">О сайте</a></li>
                     <li><a href="{% url 'contact' %}">Контакты</a></li>
                     <li><a href="{% url 'blog' %}">Блог</a></li>
+                    {% if user.is_superuser %}
+                    <li><a href="{% url 'newpost' %}">Добавление статьи</a></li>
+                    {% endif %}
                 </ul>
                 {% include 'app/loginpartial.html' %}
             </div>

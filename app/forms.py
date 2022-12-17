@@ -3,7 +3,7 @@ Definition of forms.
 """
 
 from django import forms
-from .models import Comment
+from .models import Comment, Blog
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import gettext_lazy as _
 
@@ -46,3 +46,10 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ('text',)
         label = {'text':'Комментарий'}
+
+
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = ('title', 'description', 'content', 'image',)
+        labels = {'title': 'Заголовок', 'description':'Краткое содержание', 'content':'Полное содержание', 'image':'Картинка'}
