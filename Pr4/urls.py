@@ -33,6 +33,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('anketa/', views.anketa, name='anketa'),
     path(r'^admin/', admin.site.urls),
-    path('blog/', views.blog, name='blog'),
+    path(r'blog/', views.blog, name='blog'),
     path(r'^(?P<parametr>\d+)/$', views.blogpost, name='blogpost'),
 ]
