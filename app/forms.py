@@ -3,6 +3,7 @@ Definition of forms.
 """
 
 from django import forms
+from .models import Comment
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import gettext_lazy as _
 
@@ -39,3 +40,9 @@ class CTFForm(forms.Form):
     message = forms.CharField(label="Коротко о себе",
                                widget=forms.Textarea(attrs={'rows': 12, 'cols': 20}))
     
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text',)
+        label = {'text':'Комментарий'}

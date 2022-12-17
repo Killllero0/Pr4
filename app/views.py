@@ -3,11 +3,11 @@ Definition of views.
 """
 
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.db import models
-from .models import Blog
-from .forms import CTFForm
+from .models import Blog, Comment
+from .forms import CTFForm, CommentForm
 
 
 def home(request):
@@ -81,6 +81,20 @@ def anketa(request):
 
 def blogpost(request, parametr):
     post_1 = Blog.objects.get(id=parametr)
+    comments = Comment.objects.filter(post=parametr)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment_f = form.save(commit=False)
+            comment_f.author = request.user
+            comment_f.date = datetime.now()
+            comment_f.post = Blog.objects.get(id=parametr)
+            comment_f.save()
+
+            return redirect('blogpost', parametr=post_1.id)
+    else:
+        form = CommentForm()
 
     assert isinstance(request ,HttpRequest)
     return render(
@@ -88,6 +102,8 @@ def blogpost(request, parametr):
         'app/blogpost.html',
         {
             'post_1' : post_1,
+            'comments' : comments,
+            'form' : form,
             'year': datetime.now().year
         }
     )
