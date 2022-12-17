@@ -30,6 +30,7 @@
                     <li><a href="{% url 'blog' %}">Блог</a></li>
                     {% if user.is_superuser %}
                     <li><a href="{% url 'newpost' %}">Добавление статьи</a></li>
+                    <li><a href="{% url 'videopost' %}">Видео</a></li>
                     {% endif %}
                 </ul>
                 {% include 'app/loginpartial.html' %}

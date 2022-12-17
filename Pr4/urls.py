@@ -39,6 +39,7 @@ urlpatterns = [
     path(r'blog/', views.blog, name='blog'),
     path(r'^(?P<parametr>\d+)/$', views.blogpost, name='blogpost'),
     path(r'newpost$', views.newpost, name='newpost'),
+    path(r'^videopost$', views.videopost, name='videopost')
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += staticfiles_urlpatterns()
