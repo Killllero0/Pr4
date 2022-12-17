@@ -5,7 +5,10 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest
+from django.db import models
+from .models import Blog
 from .forms import CTFForm
+
 
 def home(request):
     """Renders the home page."""
@@ -73,5 +76,32 @@ def anketa(request):
         {
             'form':form,
             'data':data
+        }
+    )
+
+def blogpost(request, parametr):
+    post_1 = Blog.objects.get(id=parametr)
+
+    assert isinstance(request ,HttpRequest)
+    return render(
+        request,
+        'app/blogpost.html',
+        {
+            'post_1' : post_1,
+            'year': datetime.now().year
+        }
+    )
+
+def blog(request):
+    posts = Blog.objects.all()
+
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/blog.html',
+        {
+            'title': 'Блог',
+            'posts': posts,
+            'year' : datetime.now().year, 
         }
     )
